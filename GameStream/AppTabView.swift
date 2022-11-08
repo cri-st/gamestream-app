@@ -1,5 +1,5 @@
 //
-//  Home.swift
+//  AppTabView.swift
 //  GameStream
 //
 //  Created by Crist on 08/11/2022.
@@ -7,22 +7,22 @@
 
 import SwiftUI
 
-struct Home: View {
+struct AppTabView: View {
     var body: some View {
         TabView {
-            Text("Profile").font(.system(size: 30, weight: .bold, design: .rounded)).tabItem {
+            ProfileView().tabItem {
                 Image(systemName: "person")
                 Text("Profile")
             }
-            Text("Games").font(.system(size: 30, weight: .bold, design: .rounded)).tabItem {
+            GamesView().tabItem {
                 Image(systemName: "gamecontroller")
                 Text("Games")
             }
-            Text("Home").font(.system(size: 30, weight: .bold, design: .rounded)).tabItem {
+            HomeView().tabItem {
                 Image(systemName: "house")
                 Text("Home")
             }
-            Text("Favorites").font(.system(size: 30, weight: .bold, design: .rounded)).tabItem {
+            FavoritesView().tabItem {
                 Image(systemName: "heart")
                 Text("Favorites")
             }
@@ -32,6 +32,6 @@ struct Home: View {
 
 struct Home_Previews: PreviewProvider {
     static var previews: some View {
-        Home()
+        AppTabView()
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct GameStreamApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StartAppView()
         }
     }
 }
