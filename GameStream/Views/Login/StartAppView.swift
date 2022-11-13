@@ -12,7 +12,7 @@ struct StartAppView: View {
         NavigationView() {
             ZStack {
                 Spacer()
-                Color(red: 21/255, green: 31/255, blue: 59/255).ignoresSafeArea()
+                Color("marine").ignoresSafeArea()
                 VStack {
                     Image("AppLogo").resizable().aspectRatio(contentMode: .fit).frame(width: 250).padding(.bottom, 32)
                     StartAndRegisterView()
@@ -29,14 +29,12 @@ struct StartAndRegisterView: View {
             HStack {
                 Spacer()
                 Button("Login") {
-                    print("Inicio de sesion")
                     loginType = true
                 }.textCase(.uppercase)
                     .foregroundColor(loginType ? .gray : .white)
                     .fontWeight(.bold)
                 Spacer()
                 Button("Sign Up") {
-                    print("Registro")
                     loginType = false
                 }.textCase(.uppercase)
                     .foregroundColor(!loginType ? .gray : .white)

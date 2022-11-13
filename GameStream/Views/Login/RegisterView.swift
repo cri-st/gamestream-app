@@ -1,5 +1,5 @@
 //
-//  LoginView.swift
+//  RegisterView.swift
 //  GameStream
 //
 //  Created by Crist on 08/11/2022.
@@ -7,28 +7,50 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct RegisterView: View {
     @State var email = ""
     @State var password = ""
+    @State var confirmPassword = ""
     
     @State var editingField = ""
     
     var body: some View {
         ZStack {
-            Color(red: 21/255, green: 31/255, blue: 59/255).ignoresSafeArea()
+            Color("marine").ignoresSafeArea()
             ScrollView() {
-                VStack(alignment: .leading) {
+                VStack(alignment: .center) {
                     Spacer(minLength: 32)
-                    Text("Email").foregroundColor(Color("dark-cian"))
+                    Text("Choose a profile picture")
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding(.bottom, 2)
+                    Text("You can change or choose it later")
+                        .font(.footnote)
+                        .fontWeight(.light)
+                        .foregroundColor(.gray)
+                        .padding(.bottom)
+                    Button(action: chossePhoto, label: {
+                        ZStack {
+                            Image("ExamplePhoto")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 85, height: 85)
+                            Image(systemName: "camera").foregroundColor(.white)
+                        }
+                    }).padding(.bottom)
+                }
+                VStack(alignment: .leading) {
+                    Text("Email*").foregroundColor(Color("dark-cian"))
                     ZStack(alignment: .leading) {
                         Text("mail" + "@cri.st")
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
                             .foregroundColor(Color("light-gray"))
                             .font(.caption)
                             .opacity(email.isEmpty ? 1 : 0)
                         TextField("", text: $email)
-                            .disableAutocorrection(true)
-                            .font(.caption)
                             .foregroundColor(.white)
+                            .font(.caption)
                             .onTapGesture {
                                 editingField = "email"
                             }
@@ -40,7 +62,7 @@ struct LoginView: View {
                                         .padding(.bottom)
                                     .offset(x: 0, y: 20)})
                     }.padding(.bottom)
-                    Text("Password").foregroundColor(.white)
+                    Text("Password*").foregroundColor(.white)
                     ZStack(alignment: .leading) {
                         Text("********")
                             .foregroundColor(Color("light-gray"))
@@ -60,15 +82,28 @@ struct LoginView: View {
                                         .padding(.bottom)
                                     .offset(x: 0, y: 20)})
                     }.padding(.bottom)
-                    Button("Forgot your password") {
-                        print("Olvidaste")
-                    }.font(.footnote)
-                        .frame(width: 300,
-                               alignment: .trailing)
-                        .foregroundColor(Color("dark-cian"))
-                        .padding(.bottom)
-                    NavigationLink(destination: {AppTabView()}) {
-                        Text("Login")
+                    Text("Confirm Password*").foregroundColor(.white)
+                    ZStack(alignment: .leading) {
+                        Text("********")
+                            .foregroundColor(Color("light-gray"))
+                            .font(.caption)
+                            .opacity(confirmPassword.isEmpty ? 1 : 0)
+                        SecureField("", text: $confirmPassword)
+                            .foregroundColor(.white)
+                            .font(.caption)
+                            .onTapGesture {
+                                editingField = "confirmPassword"
+                            }
+                            .overlay(
+                                VStack{
+                                    Divider()
+                                        .frame(height: 1)
+                                        .background(editingField == "confirmPassword" ? Color("dark-cian") : .white)
+                                        .padding(.bottom)
+                                    .offset(x: 0, y: 20)})
+                    }.padding(.bottom, 42).frame(width: 300)
+                    Button(action: register, label: {
+                        Text("Sign Up")
                             .textCase(.uppercase)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -79,12 +114,16 @@ struct LoginView: View {
                                            leading: 18,
                                            bottom: 11,
                                            trailing: 18)
-                            ).overlay(
+                            )
+                            .overlay(
                                 RoundedRectangle(cornerRadius: 6.0)
                                     .stroke(Color("dark-cian"), lineWidth: 1.0)
-                                    .shadow(color: .white, radius: 6))
-                    }.padding(.bottom, 42)
-                    Text("Social network's login")
+                                    .shadow(color: .white, radius: 6)
+                            )
+                    }).padding(.bottom, 42)
+                }
+                VStack {
+                    Text("Register with social network")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity,
                                alignment: .center)
@@ -97,13 +136,13 @@ struct LoginView: View {
                             Text("Facebook")
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .frame(maxWidth: 100, alignment: .center)
+                                .frame(maxWidth: 100,
+                                       alignment: .center)
                                 .padding(
-                                    EdgeInsets(
-                                        top: 11,
-                                        leading: 18,
-                                        bottom: 11,
-                                        trailing: 18)
+                                    EdgeInsets(top: 11,
+                                               leading: 18,
+                                               bottom: 11,
+                                               trailing: 18)
                                 )
                         }.background(Color("blue-gray")).cornerRadius(6.0)
                         Spacer()
@@ -113,28 +152,25 @@ struct LoginView: View {
                             Text("Twitter")
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .frame(
-                                    maxWidth: 100,
-                                    alignment: .center)
+                                .frame(maxWidth: 100,
+                                       alignment: .center)
                                 .padding(
-                                    EdgeInsets(
-                                        top: 11,
-                                        leading: 18,
-                                        bottom: 11,
-                                        trailing: 18
-                                    )
+                                    EdgeInsets(top: 11,
+                                               leading: 18,
+                                               bottom: 11, trailing: 18)
                                 )
                         }.background(Color("blue-gray")).cornerRadius(6.0)
                         Spacer()
                     }
+                    Spacer(minLength: 42)
                 }
             }.padding(.horizontal, 77.0).scrollIndicators(.hidden)
         }
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        RegisterView()
     }
 }
