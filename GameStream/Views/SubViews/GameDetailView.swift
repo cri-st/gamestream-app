@@ -106,7 +106,7 @@ struct Gallery:View {
         VStack(alignment: .leading) {
             Text("Gallery")
                 .textCase(.uppercase)
-                .font(.system(size: 20, weight: .bold))
+                .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)

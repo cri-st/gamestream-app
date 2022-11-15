@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Kingfisher
+import AVKit
 
 struct FavoritesView: View {
     @ObservedObject var allGames = GamesViewModel()
@@ -23,16 +24,19 @@ struct FavoritesView: View {
                     ForEach(allGames.gamesInformation, id: \.self) { game in
                         VStack(spacing: 0) {
                             ZStack {
+                                VideoPlayer(player: AVPlayer(url: URL(string: game.videosUrls.mobile)!)).frame(height: 216)
+                                    .clipShape(RoundedRectangle(cornerRadius: 3))
                                 NavigationLink(destination: SearchView(searchText: game.title)) {
                                     KFImage(URL(string: game.galleryImages[0])!)
                                         .resizable()
                                         .scaledToFit()
                                 }
+                                .hidden()
                                 Image(systemName: "play.circle.fill")
                                     .resizable()
                                     .foregroundColor(.white)
                                     .frame(width: 42, height: 42)
-                                
+                                    .hidden()
                             }.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                             Text(game.title)
                                 .font(.title3)

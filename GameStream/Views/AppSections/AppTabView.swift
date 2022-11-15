@@ -18,21 +18,29 @@ struct AppTabView: View {
             TabView(selection: $selectedTab) {
                 Group {
                     ProfileView().tabItem {
-                        Image(systemName: "person")
+                        Image("ProfileIcon")
+                            .renderingMode(.template)
+                            .resizable()
                         Text("Profile")
                     }.tag(0)
                     GamesView().tabItem {
-                        Image(systemName: "gamecontroller")
+                        Image("GamesIcon")
+                            .renderingMode(.template)
+                            .resizable()
                         Text("Games")
                     }.tag(1)
                     HomeView().tabItem {
-                        Image(systemName: "house")
+                        Image("HomeIcon")
+                            .renderingMode(.template)
+                            .resizable()
                         Text("Home")
                     }
                     .padding(.bottom, -8)
                     .tag(2)
                     FavoritesView().tabItem {
-                        Image(systemName: "heart")
+                        Image("HeartIcon")
+                            .renderingMode(.template)
+                            .resizable()
                         Text("Favorites")
                     }
                     .padding(.bottom, -8)
@@ -41,6 +49,7 @@ struct AppTabView: View {
             }
             .accentColor(Color.white)
             .navigationBarBackButtonHidden(true)
+            .preferredColorScheme(.dark)
 //                .toolbar(.hidden, for: .tabBar)
         }
     }

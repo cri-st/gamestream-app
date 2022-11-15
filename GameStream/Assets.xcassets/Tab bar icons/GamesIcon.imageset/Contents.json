@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "image 19.png",
+      "filename" : "GamesIcon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "GamesIcon@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "GamesIcon@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

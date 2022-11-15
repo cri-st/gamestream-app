@@ -21,7 +21,8 @@ struct LoginView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
                     Spacer(minLength: 32)
-                    Text("Email").foregroundColor(Color("dark-cian"))
+                    Text("Email")
+                        .foregroundColor(editingField == "email" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
                         Text("mail" + "@cri.st")
                             .foregroundColor(Color("light-gray"))
@@ -46,7 +47,8 @@ struct LoginView: View {
                                         .padding(.bottom)
                                     .offset(x: 0, y: 20)})
                     }.padding(.bottom)
-                    Text("Password").foregroundColor(.white)
+                    Text("Password")
+                        .foregroundColor(editingField == "password" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
                         Text("********")
                             .foregroundColor(Color("light-gray"))
@@ -156,7 +158,7 @@ struct LoginText: View {
     var body: some View {
         Text("Login")
             .textCase(.uppercase)
-            .font(.system(size: 17, weight: .bold))
+            .font(.system(size: 17, weight: .bold, design: .rounded))
             .foregroundColor(.white)
             .frame(maxWidth: .infinity,
                    alignment: .center)

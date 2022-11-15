@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Kingfisher
+import AVKit
 
 struct HomeView: View {
     var body: some View {
@@ -31,6 +33,7 @@ struct SubModuloHome: View {
 
     @State var searchText: String = ""
     @State var resultEmpty = false
+    @ObservedObject var allGames = GamesViewModel()
     @ObservedObject var foundGame = SearchGame()
 
     var body: some View {
@@ -62,24 +65,30 @@ struct SubModuloHome: View {
             Text("Trending")
                 .textCase(.uppercase)
                 .foregroundColor(.white)
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 18, weight: .bold, design: .rounded))
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
             ZStack {
                 NavigationLink(destination: SearchView(searchText: "The Witcher 3")) {
                     VStack(spacing: 0) {
-                        Image("thewitcher").resizable().scaledToFit()
-                        Text("The Witcher 3").padding(.leading)
+                        Image("The Witcher 3")
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                        Text("The Witcher 3")
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
+                            .padding(.leading)
                             .foregroundColor(.white)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .frame(height: 50)
                             .background(Color("blue-gray"))
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
                 }
-                Image(systemName: "play.circle.fill")
-                    .resizable()
-                    .foregroundColor(.white)
-                    .frame(width: 42, height: 42)
+//                Image(systemName: "play.circle.fill")
+//                    .resizable()
+//                    .foregroundColor(.white)
+//                    .frame(width: 42, height: 42)
 
             }.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                 .padding(.vertical)
@@ -87,7 +96,7 @@ struct SubModuloHome: View {
         VStack {
             Text("Categories")
                 .textCase(.uppercase)
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
@@ -109,7 +118,7 @@ struct SubModuloHome: View {
                             Text("FPS")
                                 .padding(.top, 55)
                                 .foregroundColor(Color("cian"))
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                         }
                     }
                     Button {
@@ -127,7 +136,7 @@ struct SubModuloHome: View {
                             Text("RPG")
                                 .padding(.top, 55)
                                 .foregroundColor(Color("cian"))
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                         }
                     }
                     Button {
@@ -145,7 +154,7 @@ struct SubModuloHome: View {
                             Text("OpenWorld")
                                 .padding(.top, 55)
                                 .foregroundColor(Color("cian"))
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                         }
                     }
                 }
@@ -154,32 +163,48 @@ struct SubModuloHome: View {
         VStack {
             Text("Recommended")
                 .textCase(.uppercase)
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
                 .padding(.bottom, 11)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    NavigationLink(destination: SearchView(searchText: "Abzu")) {
-                        Image("image 19")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 240, height: 135)
-                    }
-                    NavigationLink(destination: SearchView(searchText: "Crash")) {
-                        Image("image 20")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 240, height: 135)
-                    }
-                    NavigationLink(destination: SearchView(searchText: "Stranding")) {
-                        Image("image 21")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 240, height: 135)
+                    ForEach(allGames.gamesInformation.shuffled(), id: \.self) {
+                        game in
+                        NavigationLink(destination: GameDetailView(title: game.title, studio: game.studio, contentRaiting: game.contentRaiting, publicationYear: game.publicationYear, description: game.description, platforms: game.platforms, tags: game.tags, videoUrl: game.videosUrls.mobile, galleryImages: game.galleryImages)) {
+                            KFImage(URL(string: game.galleryImages[0])!)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 240, height: 135)
+                                .clipShape(RoundedRectangle(cornerRadius: 3))
+                        }
                     }
                 }
+            }
+        }
+        VStack {
+            Text("Games you might like")
+                .textCase(.uppercase)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                .padding(.top)
+                .padding(.bottom, 11)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(allGames.gamesInformation.shuffled(), id: \.self) {
+                        game in
+                        NavigationLink(destination: GameDetailView(title: game.title, studio: game.studio, contentRaiting: game.contentRaiting, publicationYear: game.publicationYear, description: game.description, platforms: game.platforms, tags: game.tags, videoUrl: game.videosUrls.mobile, galleryImages: game.galleryImages)) {
+                            KFImage(URL(string: game.galleryImages[2])!)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 240, height: 135)
+                                .clipShape(RoundedRectangle(cornerRadius: 3))
+                        }
+                    }
+                }
+                .padding(.bottom, 18)
             }
         }
     }

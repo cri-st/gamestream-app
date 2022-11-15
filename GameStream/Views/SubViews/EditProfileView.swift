@@ -156,7 +156,7 @@ struct EditProfileView: View {
                     }, label: {
                         Text("Update")
                             .textCase(.uppercase)
-                            .font(.system(size: 17, weight: .bold))
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,
                                    alignment: .center)

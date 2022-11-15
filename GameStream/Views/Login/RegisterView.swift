@@ -40,7 +40,8 @@ struct RegisterView: View {
                     }).padding(.bottom)
                 }
                 VStack(alignment: .leading) {
-                    Text("Email*").foregroundColor(Color("dark-cian"))
+                    Text("Email*")
+                        .foregroundColor(editingField == "email" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
                         Text("mail" + "@cri.st")
                             .autocapitalization(.none)
@@ -62,7 +63,8 @@ struct RegisterView: View {
                                         .padding(.bottom)
                                     .offset(x: 0, y: 20)})
                     }.padding(.bottom)
-                    Text("Password*").foregroundColor(.white)
+                    Text("Password*")
+                        .foregroundColor(editingField == "password" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
                         Text("********")
                             .foregroundColor(Color("light-gray"))
@@ -82,7 +84,8 @@ struct RegisterView: View {
                                         .padding(.bottom)
                                     .offset(x: 0, y: 20)})
                     }.padding(.bottom)
-                    Text("Confirm Password*").foregroundColor(.white)
+                    Text("Confirm Password*")
+                        .foregroundColor(editingField == "confirmPassword" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
                         Text("********")
                             .foregroundColor(Color("light-gray"))
@@ -105,7 +108,7 @@ struct RegisterView: View {
                     Button(action: register, label: {
                         Text("Sign Up")
                             .textCase(.uppercase)
-                            .font(.system(size: 17, weight: .bold))
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,
                                    alignment: .center)

@@ -35,13 +35,13 @@ struct StartAndRegisterView: View {
                     loginType = true
                 }.textCase(.uppercase)
                     .foregroundColor(loginType ? .gray : .white)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
                 Spacer()
                 Button("Sign Up") {
                     loginType = false
                 }.textCase(.uppercase)
                     .foregroundColor(!loginType ? .gray : .white)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
                 Spacer()
             }
             if loginType == true {
@@ -49,7 +49,7 @@ struct StartAndRegisterView: View {
             } else {
                 RegisterView()
             }
-        }
+        }.preferredColorScheme(.dark)
     }
 }
 

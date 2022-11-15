@@ -28,18 +28,19 @@ struct SearchView: View {
             } else {
                 Color("marine").ignoresSafeArea()
                 VStack {
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         Text("Search result")
                             .textCase(.uppercase)
                             .font(.system(size: 22, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
-                            .padding(EdgeInsets(top: 16, leading: 0, bottom: 11, trailing: 0))
+                        .padding(EdgeInsets(top: 16, leading: 0, bottom: 11, trailing: 0))
                         if (searchGames.gamesInformation.count == 0) {
-                            Text("Game not found for : '\(searchedText)'")
+                            Text("Game not found for: \"\(searchedText)\"")
                                 .multilineTextAlignment(.center)
-                                .font(.system(size: 32, weight: .bold, design: .rounded))
+                                .font(.system(size: 26, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
                                 .padding(EdgeInsets(top: 16, leading: 0, bottom: 11, trailing: 0))
+                                
                         } else {
                             LazyVGrid(columns: gridForm, spacing: 8) {
                                 ForEach(searchGames.gamesInformation, id: \.self) {
@@ -62,7 +63,6 @@ struct SearchView: View {
                 }.padding(.horizontal, 6)
             }
         }
-//        .toolbar(.hidden, for: .tabBar)
     }
 }
 
