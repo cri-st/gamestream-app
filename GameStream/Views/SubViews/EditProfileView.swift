@@ -23,7 +23,7 @@ struct EditProfileView: View {
     var body: some View {
         ZStack {
             Color("marine").ignoresSafeArea()
-            ScrollView() {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .center) {
                     Text("Edit Profile")
                         .font(.system(size: 22, weight: .bold, design: .rounded))
@@ -156,7 +156,7 @@ struct EditProfileView: View {
                     }, label: {
                         Text("Update")
                             .textCase(.uppercase)
-                            .fontWeight(.bold)
+                            .font(.system(size: 17, weight: .bold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,
                                    alignment: .center)
@@ -180,7 +180,8 @@ struct EditProfileView: View {
                     }
                     .padding(.bottom, 42)
                 }
-            }.padding(.horizontal, 77.0).scrollIndicators(.hidden)
+            }
+            .padding(.horizontal, 77.0)
         }
         .onAppear(perform: {
             let email = DataSaver.shared.dataRecovery(key: DataSaver.userEmailKey)

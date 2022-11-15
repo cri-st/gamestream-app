@@ -61,7 +61,8 @@ struct SearchView: View {
                     }.frame(alignment: .leading)
                 }.padding(.horizontal, 6)
             }
-        }.toolbar(.hidden, for: .tabBar)
+        }
+//        .toolbar(.hidden, for: .tabBar)
     }
 }
 

@@ -61,9 +61,8 @@ struct SubModuloHome: View {
             .clipShape(Capsule())
             Text("Trending")
                 .textCase(.uppercase)
-                .font(.title3)
                 .foregroundColor(.white)
-                .bold()
+                .font(.system(size: 18, weight: .bold))
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
             ZStack {
@@ -88,9 +87,8 @@ struct SubModuloHome: View {
         VStack {
             Text("Categories")
                 .textCase(.uppercase)
-                .font(.title3)
+                .font(.system(size: 18, weight: .bold))
                 .foregroundColor(.white)
-                .bold()
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
                 .padding(.bottom, 11)
@@ -110,9 +108,8 @@ struct SubModuloHome: View {
                                 .padding(.bottom, 35)
                             Text("FPS")
                                 .padding(.top, 55)
-                                .font(.title3)
                                 .foregroundColor(Color("cian"))
-                                .bold()
+                                .font(.system(size: 18, weight: .bold))
                         }
                     }
                     Button {
@@ -129,9 +126,8 @@ struct SubModuloHome: View {
                                 .padding(.bottom, 35)
                             Text("RPG")
                                 .padding(.top, 55)
-                                .font(.title3)
                                 .foregroundColor(Color("cian"))
-                                .bold()
+                                .font(.system(size: 18, weight: .bold))
                         }
                     }
                     Button {
@@ -148,9 +144,8 @@ struct SubModuloHome: View {
                                 .padding(.bottom, 35)
                             Text("OpenWorld")
                                 .padding(.top, 55)
-                                .font(.title3)
                                 .foregroundColor(Color("cian"))
-                                .bold()
+                                .font(.system(size: 18, weight: .bold))
                         }
                     }
                 }
@@ -159,9 +154,8 @@ struct SubModuloHome: View {
         VStack {
             Text("Recommended")
                 .textCase(.uppercase)
-                .font(.title3)
+                .font(.system(size: 18, weight: .bold))
                 .foregroundColor(.white)
-                .bold()
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
                 .padding(.bottom, 11)

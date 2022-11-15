@@ -18,7 +18,7 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             Color("marine").ignoresSafeArea()
-            ScrollView() {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
                     Spacer(minLength: 32)
                     Text("Email").foregroundColor(Color("dark-cian"))
@@ -137,7 +137,8 @@ struct LoginView: View {
                         Spacer()
                     }
                 }
-            }.padding(.horizontal, 77.0).scrollIndicators(.hidden)
+            }
+            .padding(.horizontal, 77.0)
         }
         .alert(isPresented: $loginErrorAlert) {
             Alert(title: Text("Login error"), message: Text("Bad email or password"), dismissButton: .default(Text("Ok")))
@@ -155,7 +156,7 @@ struct LoginText: View {
     var body: some View {
         Text("Login")
             .textCase(.uppercase)
-            .fontWeight(.bold)
+            .font(.system(size: 17, weight: .bold))
             .foregroundColor(.white)
             .frame(maxWidth: .infinity,
                    alignment: .center)

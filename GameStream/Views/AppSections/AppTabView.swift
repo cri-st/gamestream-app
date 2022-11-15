@@ -8,35 +8,47 @@
 import SwiftUI
 
 struct AppTabView: View {
+    var maxWidth: CGFloat! = 450
     
     @State var selectedTab:Int = 2
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            Group {
-                ProfileView().tabItem {
-                    Image(systemName: "person")
-                    Text("Profile")
-                }.tag(0)
-                GamesView().tabItem {
-                    Image(systemName: "gamecontroller")
-                    Text("Games")
-                }.tag(1)
-                HomeView().tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
-                }.tag(2)
-                FavoritesView().tabItem {
-                    Image(systemName: "heart")
-                    Text("Favorites")
-                }.tag(3)
-            }.toolbarBackground(.visible,
-                                for: .tabBar)
-            .toolbarBackground(Color("tab-bar"),
-                               for: .tabBar)
-        }.accentColor(Color.white)
-        .toolbar(.hidden, for: .tabBar)
-        .navigationBarBackButtonHidden(true)
+        ZStack {
+            Color("marine").ignoresSafeArea()
+            TabView(selection: $selectedTab) {
+                Group {
+                    ProfileView().tabItem {
+                        Image(systemName: "person")
+                        Text("Profile")
+                    }.tag(0)
+                    GamesView().tabItem {
+                        Image(systemName: "gamecontroller")
+                        Text("Games")
+                    }.tag(1)
+                    HomeView().tabItem {
+                        Image(systemName: "house")
+                        Text("Home")
+                    }
+                    .padding(.bottom, -8)
+                    .tag(2)
+                    FavoritesView().tabItem {
+                        Image(systemName: "heart")
+                        Text("Favorites")
+                    }
+                    .padding(.bottom, -8)
+                    .tag(3)
+                }
+            }
+            .accentColor(Color.white)
+            .navigationBarBackButtonHidden(true)
+//                .toolbar(.hidden, for: .tabBar)
+        }
+    }
+    
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor(Color("tab-bar"))
+        UITabBar.appearance().barTintColor = UIColor(Color("tab-bar"))
+        UITabBar.appearance().isTranslucent = true
     }
 }
 

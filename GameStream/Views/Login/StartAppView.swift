@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct StartAppView: View {
+    var maxWidth: CGFloat! = 450
+
     var body: some View {
         NavigationView() {
             ZStack {
@@ -15,10 +17,11 @@ struct StartAppView: View {
                 Color("marine").ignoresSafeArea()
                 VStack {
                     Image("AppLogo").resizable().aspectRatio(contentMode: .fit).frame(width: 250).padding(.bottom, 32)
+                        .offset(x: 0, y: 10)
                     StartAndRegisterView()
-                }
+                }.frame(width: maxWidth)
             }.navigationBarHidden(true)
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -32,13 +35,13 @@ struct StartAndRegisterView: View {
                     loginType = true
                 }.textCase(.uppercase)
                     .foregroundColor(loginType ? .gray : .white)
-                    .fontWeight(.bold)
+                    .font(.system(size: 18, weight: .bold))
                 Spacer()
                 Button("Sign Up") {
                     loginType = false
                 }.textCase(.uppercase)
                     .foregroundColor(!loginType ? .gray : .white)
-                    .fontWeight(.bold)
+                    .font(.system(size: 18, weight: .bold))
                 Spacer()
             }
             if loginType == true {

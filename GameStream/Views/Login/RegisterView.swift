@@ -17,7 +17,7 @@ struct RegisterView: View {
     var body: some View {
         ZStack {
             Color("marine").ignoresSafeArea()
-            ScrollView() {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .center) {
                     Spacer(minLength: 32)
                     Text("Choose a profile picture")
@@ -105,7 +105,7 @@ struct RegisterView: View {
                     Button(action: register, label: {
                         Text("Sign Up")
                             .textCase(.uppercase)
-                            .fontWeight(.bold)
+                            .font(.system(size: 17, weight: .bold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,
                                    alignment: .center)
@@ -164,7 +164,8 @@ struct RegisterView: View {
                     }
                     Spacer(minLength: 42)
                 }
-            }.padding(.horizontal, 77.0).scrollIndicators(.hidden)
+            }
+            .padding(.horizontal, 77.0)
         }
     }
 }

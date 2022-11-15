@@ -59,7 +59,11 @@ class DataSaver {
 
     func recoverProfilePhoto() -> UIImage? {
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-            return UIImage(contentsOfFile: URL(filePath: dir.absoluteString).appendingPathComponent("profilePhoto.png").path)
+            if #available(iOS 16.0, *) {
+                return UIImage(contentsOfFile: URL(filePath: dir.absoluteString).appendingPathComponent("profilePhoto.png").path)
+            } else {
+                return UIImage(contentsOfFile: NSURL.fileURL(withPathComponents: [dir.absoluteString, "profilePhoto.png"])!.path)
+            }
         }
         return nil
     }
