@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FirebaseAuth
 
 struct RegisterView: View {
     @ObservedObject var login: LoginViewModel
@@ -18,33 +17,13 @@ struct RegisterView: View {
     @State private var editingField = ""
     
     @State private var passwordsDoNotMatch = false
-    
+
     var body: some View {
         ZStack {
             Color("marine").ignoresSafeArea()
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .center) {
-                    Spacer(minLength: 32)
-                    Text("Choose a profile picture")
-                        .foregroundColor(.white)
-                        .bold()
-                        .padding(.bottom, 2)
-                    Text("You can change or choose it later")
-                        .font(.footnote)
-                        .fontWeight(.light)
-                        .foregroundColor(.gray)
-                        .padding(.bottom)
-                    Button(action: chossePhoto, label: {
-                        ZStack {
-                            Image("ExamplePhoto")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 85, height: 85)
-                            Image(systemName: "camera").foregroundColor(.white)
-                        }
-                    }).padding(.bottom)
-                }
                 VStack(alignment: .leading) {
+                    Spacer(minLength: 32)
                     Text("Email*")
                         .foregroundColor(editingField == "email" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
@@ -196,6 +175,40 @@ struct RegisterView: View {
         }
     }
 }
+
+struct ProfilePictureView: View {
+    @State var isCameraActive = false
+    @State var profilePhotoImage: Image? = Image("ExamplePhoto")
+
+    var body: some View {
+        VStack(alignment: .center) {
+            Spacer(minLength: 32)
+            Text("Choose a profile picture")
+                .foregroundColor(.white)
+                .bold()
+                .padding(.bottom, 2)
+            Text("You can change or choose it later")
+                .font(.footnote)
+                .fontWeight(.light)
+                .foregroundColor(.gray)
+                .padding(.bottom)
+            Button(action: { isCameraActive = true }, label: {
+                ZStack {
+                    self.profilePhotoImage!
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 85, height: 85)
+                        .clipShape(Circle())
+                        .sheet(isPresented: $isCameraActive) {
+                            SUImagePickerView(image: $profilePhotoImage, isPresented: $isCameraActive)
+                        }
+                    Image(systemName: "camera").foregroundColor(.white)
+                }
+            }).padding(.bottom)
+        }
+    }
+}
+
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
         RegisterView(login: LoginViewModel(signedIn: false))

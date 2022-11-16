@@ -10,7 +10,8 @@ import FirebaseAuth
 
 class LoginViewModel: ObservableObject {
     let auth = Auth.auth()
-    
+    _const static let DefaultImage = "https://placekitten.com/250/250"
+
     @Published var signedIn: Bool = false
     @Published var alertMessage = ""
     @Published var showAlert = false
@@ -18,6 +19,7 @@ class LoginViewModel: ObservableObject {
     init(signedIn: Bool) {
         self.signedIn = signedIn
     }
+
     var isSignIn: Bool {
         return auth.currentUser != nil
     }
@@ -56,10 +58,16 @@ class LoginViewModel: ObservableObject {
     }
 
     func getEmail() -> String {
+        guard self.isSignIn else {
+            return ""
+        }
         return auth.currentUser?.email ?? ""
     }
 
     func update(email: String, password: String, userName: String) {
+        guard !email.isEmpty && self.isSignIn else {
+            return
+        }
         let user = auth.currentUser
         user?.updateEmail(to: email) { [weak self] error in
             if let error = error {
@@ -89,6 +97,32 @@ class LoginViewModel: ObservableObject {
     }
 
     func getUsername() -> String {
+        guard self.isSignIn else {
+            return ""
+        }
         return auth.currentUser?.displayName ?? ""
+    }
+
+    func uploadProfilePhoto(profilePhotoUrl: String) {
+        guard !profilePhotoUrl.isEmpty && self.isSignIn else {
+            return
+        }
+        let user = auth.currentUser
+        if let currentUser = user?.createProfileChangeRequest() {
+            currentUser.photoURL = URL(string: profilePhotoUrl)
+            currentUser.commitChanges() { [weak self] error in
+                if let error = error {
+                    self?.alertMessage = "Update Photo URL Error: \(error.localizedDescription)"
+                    self?.showAlert = true
+                }
+            }
+        }
+    }
+
+    func getProfilePhoto() -> String {
+        guard self.isSignIn else {
+            return ""
+        }
+        return auth.currentUser?.photoURL?.absoluteString ?? LoginViewModel.DefaultImage
     }
 }

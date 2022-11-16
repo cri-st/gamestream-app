@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct EditProfileView: View {
     @ObservedObject var login: LoginViewModel
@@ -19,8 +20,8 @@ struct EditProfileView: View {
     @State var passwordsDoNotMatch = false
     @State var dataSaved = false
 
-    @State var profilePhoto: Image? = Image("ExamplePhoto")
     @State var isCameraActive = false
+    @State var profilePhotoUrl: String? = LoginViewModel.DefaultImage
 
     var body: some View {
         ZStack {
@@ -31,15 +32,25 @@ struct EditProfileView: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .padding(EdgeInsets(top: 16, leading: 0, bottom: 32, trailing: 0))
+                    Spacer(minLength: 32)
+                    Text("Choose a profile picture")
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding(.bottom, 2)
+                    Text("You can change it")
+                        .font(.footnote)
+                        .fontWeight(.light)
+                        .foregroundColor(.gray)
+                        .padding(.bottom)
                     Button(action: { isCameraActive = true }, label: {
                         ZStack {
-                            profilePhoto!
+                            KFImage(URL(string: profilePhotoUrl!)!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 85, height: 85)
                                 .clipShape(Circle())
                                 .sheet(isPresented: $isCameraActive) {
-                                    SUImagePickerView(image: self.$profilePhoto, isPresented: $isCameraActive)
+                                    ImagePickerView(imageUrl: $profilePhotoUrl, isPresented: $isCameraActive)
                                 }
                             Image(systemName: "camera").foregroundColor(.white)
                         }
@@ -150,6 +161,7 @@ struct EditProfileView: View {
                     Button(action: {
                         if (password == confirmPassword) {
                             login.update(email: self.email, password: self.password, userName: self.userName)
+                            login.uploadProfilePhoto(profilePhotoUrl: self.profilePhotoUrl!)
                             passwordsDoNotMatch = false
                             dataSaved = true
                         } else {
@@ -191,10 +203,7 @@ struct EditProfileView: View {
         .onAppear(perform: {
             self.email = login.getEmail()
             self.userName = login.getUsername()
-            
-            if DataSaver.shared.recoverProfilePhoto() != nil {
-                profilePhoto = Image(uiImage: DataSaver.shared.recoverProfilePhoto()!)
-            }
+            self.profilePhotoUrl = login.getProfilePhoto()
         })
     }
 }

@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ProfileView: View {
     @ObservedObject var login: LoginViewModel
     @State var userName = "Lanie Janecki"
-    @State var profilePhoto:UIImage! = UIImage(named: "ExamplePhoto")
+    @State var profilePhotoUrl: String = LoginViewModel.DefaultImage
 
     var body: some View {
         ZStack {
@@ -22,11 +23,11 @@ struct ProfileView: View {
                     .padding(EdgeInsets(top: 16, leading: 0, bottom: 32, trailing: 0))
                 ScrollView(showsIndicators: false) {
                     VStack {
-                        Image(uiImage: profilePhoto)
+                        KFImage(URL(string: self.profilePhotoUrl))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 98, height: 98)
-                        .clipShape(Circle())
+                            .clipShape(Circle())
                         Text(userName)
                             .font(.system(size: 22, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
@@ -44,9 +45,7 @@ struct ProfileView: View {
             }.padding(.horizontal, 5)
         }.onAppear {
             userName = login.getUsername()
-            if DataSaver.shared.recoverProfilePhoto() != nil {
-                profilePhoto = DataSaver.shared.recoverProfilePhoto()
-            }
+            profilePhotoUrl = login.getProfilePhoto()
         }
     }
 }

@@ -51,7 +51,6 @@ struct AppTabView: View {
             .accentColor(Color.white)
             .navigationBarBackButtonHidden(true)
             .preferredColorScheme(.dark)
-//                .toolbar(.hidden, for: .tabBar)
         }
     }
     
