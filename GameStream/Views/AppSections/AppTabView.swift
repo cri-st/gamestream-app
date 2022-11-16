@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AppTabView: View {
+    @ObservedObject var login: LoginViewModel
     var maxWidth: CGFloat! = 450
     
     @State var selectedTab:Int = 2
@@ -17,7 +18,7 @@ struct AppTabView: View {
             Color("marine").ignoresSafeArea()
             TabView(selection: $selectedTab) {
                 Group {
-                    ProfileView().tabItem {
+                    ProfileView(login: self.login).tabItem {
                         Image("ProfileIcon")
                             .renderingMode(.template)
                             .resizable()
@@ -54,7 +55,8 @@ struct AppTabView: View {
         }
     }
     
-    init() {
+    init(login: LoginViewModel) {
+        self.login = login
         UITabBar.appearance().backgroundColor = UIColor(Color("tab-bar"))
         UITabBar.appearance().barTintColor = UIColor(Color("tab-bar"))
         UITabBar.appearance().isTranslucent = true
@@ -63,6 +65,6 @@ struct AppTabView: View {
 
 struct Home_Previews: PreviewProvider {
     static var previews: some View {
-        AppTabView()
+        AppTabView(login: LoginViewModel(signedIn: false))
     }
 }

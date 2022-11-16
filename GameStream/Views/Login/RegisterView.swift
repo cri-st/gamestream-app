@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct RegisterView: View {
-    @State var email = ""
-    @State var password = ""
-    @State var confirmPassword = ""
+    @ObservedObject var login: LoginViewModel
+
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
     
-    @State var editingField = ""
+    @State private var editingField = ""
+    
+    @State private var passwordsDoNotMatch = false
     
     var body: some View {
         ZStack {
@@ -43,13 +48,14 @@ struct RegisterView: View {
                     Text("Email*")
                         .foregroundColor(editingField == "email" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
-                        Text("mail" + "@cri.st")
+                        TextField("mail" + "@cri.st", text: $email)
+                            .keyboardType(.emailAddress)
+                            .foregroundColor(Color("light-gray"))
+                            .textInputAutocapitalization(.never)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
-                            .foregroundColor(Color("light-gray"))
-                            .font(.caption)
-                            .opacity(email.isEmpty ? 1 : 0)
-                        TextField("", text: $email)
+                            .autocorrectionDisabled()
+                            .submitLabel(.next)
                             .foregroundColor(.white)
                             .font(.caption)
                             .onTapGesture {
@@ -66,12 +72,13 @@ struct RegisterView: View {
                     Text("Password*")
                         .foregroundColor(editingField == "password" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
-                        Text("********")
+                        SecureField("********", text: $password)
                             .foregroundColor(Color("light-gray"))
-                            .font(.caption)
-                            .opacity(password.isEmpty ? 1 : 0)
-                        SecureField("", text: $password)
-                            .foregroundColor(.white)
+                            .textInputAutocapitalization(.never)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .autocorrectionDisabled()
+                            .submitLabel(.next)
                             .font(.caption)
                             .onTapGesture {
                                 editingField = "password"
@@ -87,11 +94,13 @@ struct RegisterView: View {
                     Text("Confirm Password*")
                         .foregroundColor(editingField == "confirmPassword" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
-                        Text("********")
+                        SecureField("********", text: $confirmPassword)
                             .foregroundColor(Color("light-gray"))
-                            .font(.caption)
-                            .opacity(confirmPassword.isEmpty ? 1 : 0)
-                        SecureField("", text: $confirmPassword)
+                            .textInputAutocapitalization(.never)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .autocorrectionDisabled()
+                            .submitLabel(.done)
                             .foregroundColor(.white)
                             .font(.caption)
                             .onTapGesture {
@@ -170,11 +179,25 @@ struct RegisterView: View {
             }
             .padding(.horizontal, 77.0)
         }
+        .alert("Passwords do not match.", isPresented: $passwordsDoNotMatch) {
+            Button("Ok", role: .cancel) {}
+        }
+        .alert(login.alertMessage, isPresented: $login.showAlert) {
+            Button("Ok", role: .cancel) {}
+        }
+    }
+    
+    func register() {
+        if (self.password == self.confirmPassword) {
+            self.passwordsDoNotMatch = false
+            login.signUp(email: self.email, password: self.password)
+        } else {
+            self.passwordsDoNotMatch = true
+        }
     }
 }
-
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterView()
+        RegisterView(login: LoginViewModel(signedIn: false))
     }
 }

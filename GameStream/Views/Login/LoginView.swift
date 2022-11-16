@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
-    @State var email = ""
-    @State var password = ""
+    @ObservedObject var login: LoginViewModel
 
-    @State var editingField = ""
-    @State var loginError = false  // Esto es para no tener que ingresar User & Password, pero tiene q inciar en true
-    @State var loginErrorAlert = false
+    @State private var email = ""
+    @State private var password = ""
+
+    @State private var editingField = ""
 
     var body: some View {
         ZStack {
@@ -24,20 +25,18 @@ struct LoginView: View {
                     Text("Email")
                         .foregroundColor(editingField == "email" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
-                        Text("mail" + "@cri.st")
+                        TextField("mail" + "@cri.st", text: $email)
+                            .keyboardType(.emailAddress)
                             .foregroundColor(Color("light-gray"))
-                            .font(.caption)
-                            .opacity(email.isEmpty ? 1 : 0)
-                        TextField("", text: $email)
+                            .textInputAutocapitalization(.never)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
+                            .autocorrectionDisabled()
                             .font(.caption)
                             .foregroundColor(.white)
+                            .submitLabel(.next)
                             .onTapGesture {
                                 editingField = "email"
-                            }
-                            .onChange(of: email) { newValue in
-                                validateLogin()
                             }
                             .overlay(
                                 VStack{
@@ -50,18 +49,16 @@ struct LoginView: View {
                     Text("Password")
                         .foregroundColor(editingField == "password" ? Color("dark-cian") : .white)
                     ZStack(alignment: .leading) {
-                        Text("********")
+                        SecureField("********", text: $password)
                             .foregroundColor(Color("light-gray"))
-                            .font(.caption)
-                            .opacity(password.isEmpty ? 1 : 0)
-                        SecureField("", text: $password)
+                            .textInputAutocapitalization(.never)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
                             .foregroundColor(.white)
                             .font(.caption)
+                            .submitLabel(.done)
                             .onTapGesture {
                                 editingField = "password"
-                            }
-                            .onChange(of: password) { newValue in
-                                validateLogin()
                             }
                             .overlay(
                                 VStack{
@@ -78,23 +75,12 @@ struct LoginView: View {
                                alignment: .trailing)
                         .foregroundColor(Color("dark-cian"))
                         .padding(.bottom)
-                    ZStack {
-                        Button {
-                            loginErrorAlert = true
-                        } label: {
-                            LoginText()
-                        }
-                        .padding(.bottom, 42)
-                        .opacity(loginError ? 1 : 0)
-                        .disabled(loginError == false)
-
-                        NavigationLink(destination: { AppTabView() }) {
-                            LoginText()
-                        }
-                        .padding(.bottom, 42)
-                        .opacity(loginError ? 0 : 1)
-                        .disabled(loginError)
+                    Button {
+                        validateLogin()
+                    } label: {
+                        LoginText()
                     }
+                    .padding(.bottom, 42)
                     Text("Social network's login")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity,
@@ -142,15 +128,16 @@ struct LoginView: View {
             }
             .padding(.horizontal, 77.0)
         }
-        .alert(isPresented: $loginErrorAlert) {
-            Alert(title: Text("Login error"), message: Text("Bad email or password"), dismissButton: .default(Text("Ok")))
+        .alert(login.alertMessage, isPresented: $login.showAlert) {
+            Button("Ok", role: .cancel) {}
         }
     }
 
     func validateLogin() {
-        let email = DataSaver.shared.dataRecovery(key: DataSaver.userEmailKey)
-        let password = DataSaver.shared.dataRecovery(key: DataSaver.userPassKey)
-        loginError = !(email == self.email && password == self.password)
+        guard !self.email.isEmpty, !self.password.isEmpty else {
+            return
+        }
+        login.signIn(email: email, password: password)
     }
 }
 
@@ -176,6 +163,6 @@ struct LoginText: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(login: LoginViewModel(signedIn: false))
     }
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @ObservedObject var login: LoginViewModel
     @State var userName = "Lanie Janecki"
     @State var profilePhoto:UIImage! = UIImage(named: "ExamplePhoto")
 
@@ -37,15 +38,12 @@ struct ProfileView: View {
                             .foregroundColor(.white)
                             .frame(idealWidth: 100, maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 13)
-                        SettingsView()
+                        SettingsView(login: self.login)
                     }
                 }.padding(.bottom, 8)
             }.padding(.horizontal, 5)
         }.onAppear {
-            let savedUserName = DataSaver.shared.dataRecovery(key: DataSaver.userNameKey)
-            if savedUserName != "" {
-                userName = DataSaver.shared.dataRecovery(key: DataSaver.userNameKey)
-            }
+            userName = login.getUsername()
             if DataSaver.shared.recoverProfilePhoto() != nil {
                 profilePhoto = DataSaver.shared.recoverProfilePhoto()
             }
@@ -54,20 +52,23 @@ struct ProfileView: View {
 }
 
 struct SettingsView: View {
+    @ObservedObject var login: LoginViewModel
     @State var isNotificationsOn = false
     @State var showRateAlert = false
 
     var body: some View {
         VStack(spacing: 3) {
-            NavigationLink(destination: EmptyView()) {
+            Button {
+                self.login.signOut()
+            } label: {
                 HStack {
                     Text("Account").foregroundColor(.white)
                     Spacer()
                     Image(systemName: "chevron.right").foregroundColor(.white)
                 }
-                .padding()
-                .frame(height: 65)
             }
+            .padding()
+            .frame(height: 65)
             .background(Color("blue-gray"))
             .clipShape(RoundedRectangle(cornerRadius: 5))
 
@@ -81,7 +82,7 @@ struct SettingsView: View {
             .background(Color("blue-gray"))
             .clipShape(RoundedRectangle(cornerRadius: 5))
 
-            NavigationLink(destination: EditProfileView()) {
+            NavigationLink(destination: EditProfileView(login: self.login)) {
                 HStack {
                     Text("Edit Profile").foregroundColor(.white)
                     Spacer()
@@ -119,6 +120,6 @@ struct SettingsView: View {
 
 struct Profile_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(login: LoginViewModel(signedIn: false))
     }
 }

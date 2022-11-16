@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct EditProfileView: View {
+    @ObservedObject var login: LoginViewModel
+
     @State var email = ""
     @State var password = ""
     @State var confirmPassword = ""
@@ -147,7 +149,7 @@ struct EditProfileView: View {
                     }.padding(.bottom).frame(width: 300)
                     Button(action: {
                         if (password == confirmPassword) {
-                            updateData()
+                            login.update(email: self.email, password: self.password, userName: self.userName)
                             passwordsDoNotMatch = false
                             dataSaved = true
                         } else {
@@ -172,11 +174,14 @@ struct EditProfileView: View {
                                     .shadow(color: .white, radius: 6)
                             )
                     })
-                    .alert(isPresented: $passwordsDoNotMatch) {
-                        Alert(title: Text("Passwords do not match"), message: Text("Passwords do not match"), dismissButton: .default(Text("Ok")))
+                    .alert("Data saved correctly", isPresented: $dataSaved) {
+                        Button("Ok", role: .cancel) {}
                     }
-                    .alert(isPresented: $dataSaved) {
-                        Alert(title: Text("Data saved correctly"), message: Text("Data saved correctly"), dismissButton: .default(Text("Ok")))
+                    .alert("Passwords do not match.", isPresented: $passwordsDoNotMatch) {
+                        Button("Ok", role: .cancel) {}
+                    }
+                    .alert(login.alertMessage, isPresented: $login.showAlert) {
+                        Button("Ok", role: .cancel) {}
                     }
                     .padding(.bottom, 42)
                 }
@@ -184,28 +189,18 @@ struct EditProfileView: View {
             .padding(.horizontal, 77.0)
         }
         .onAppear(perform: {
-            let email = DataSaver.shared.dataRecovery(key: DataSaver.userEmailKey)
-            let userName = DataSaver.shared.dataRecovery(key: DataSaver.userNameKey)
-            if !email.isEmpty {
-                self.email = email
-            }
-            if !userName.isEmpty {
-                self.userName = userName
-            }
+            self.email = login.getEmail()
+            self.userName = login.getUsername()
             
             if DataSaver.shared.recoverProfilePhoto() != nil {
                 profilePhoto = Image(uiImage: DataSaver.shared.recoverProfilePhoto()!)
             }
         })
     }
-
-    func updateData() {
-        DataSaver.shared.saveData(email: email, password: password, userName: userName)
-    }
 }
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        EditProfileView()
+        EditProfileView(login: LoginViewModel(signedIn: false))
     }
 }

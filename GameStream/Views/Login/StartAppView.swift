@@ -9,52 +9,48 @@ import SwiftUI
 
 struct StartAppView: View {
     var maxWidth: CGFloat! = 450
+    @ObservedObject var login = LoginViewModel(signedIn: false)
+    @State private var loginType = true
 
     var body: some View {
         NavigationView() {
-            ZStack {
-                Spacer()
-                Color("marine").ignoresSafeArea()
-                VStack {
-                    Image("AppLogo").resizable().aspectRatio(contentMode: .fit).frame(width: 250).padding(.bottom, 32)
-                        .offset(x: 0, y: 10)
-                    StartAndRegisterView()
-                }.frame(width: maxWidth)
-            }.navigationBarHidden(true)
-        }.navigationViewStyle(StackNavigationViewStyle())
-    }
-}
-
-struct StartAndRegisterView: View {
-    @State var loginType = true
-    var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button("Login") {
-                    loginType = true
-                }.textCase(.uppercase)
-                    .foregroundColor(loginType ? .gray : .white)
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                Spacer()
-                Button("Sign Up") {
-                    loginType = false
-                }.textCase(.uppercase)
-                    .foregroundColor(!loginType ? .gray : .white)
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                Spacer()
-            }
-            if loginType == true {
-                LoginView()
+            if login.signedIn || login.isSignIn {
+                AppTabView(login: self.login)
             } else {
-                RegisterView()
+                ZStack {
+                    Spacer()
+                    Color("marine").ignoresSafeArea()
+                    VStack {
+                        Image("AppLogo").resizable().aspectRatio(contentMode: .fit).frame(width: 250).padding(.bottom, 32)
+                            .offset(x: 0, y: 10)
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Button("Login") {
+                                    loginType = true
+                                }.textCase(.uppercase)
+                                    .foregroundColor(loginType ? .white : .gray)
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                Spacer()
+                                Button("Sign Up") {
+                                    loginType = false
+                                }.textCase(.uppercase)
+                                    .foregroundColor(!loginType ? .white : .gray)
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                Spacer()
+                            }
+                            if loginType == true {
+                                LoginView(login: self.login)
+                            } else {
+                                RegisterView(login: self.login)
+                            }
+                        }.preferredColorScheme(.dark)
+                    }.frame(width: maxWidth)
+                }.navigationBarHidden(true)
             }
-        }.preferredColorScheme(.dark)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
-}
-
-func register() {
-    print("registrar")
 }
 
 func chossePhoto() {
