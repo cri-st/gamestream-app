@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct EditProfileView: View {
     @ObservedObject var login: LoginViewModel
@@ -44,14 +43,18 @@ struct EditProfileView: View {
                         .padding(.bottom)
                     Button(action: { isCameraActive = true }, label: {
                         ZStack {
-                            KFImage(URL(string: profilePhotoUrl!)!)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 85, height: 85)
-                                .clipShape(Circle())
-                                .sheet(isPresented: $isCameraActive) {
-                                    ImagePickerView(imageUrl: $profilePhotoUrl, isPresented: $isCameraActive)
-                                }
+                            AsyncImage(url: URL(string: profilePhotoUrl!)!) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 85, height: 85)
+                                    .clipShape(Circle())
+                                    .sheet(isPresented: $isCameraActive) {
+                                        ImagePickerView(imageUrl: $profilePhotoUrl, isPresented: $isCameraActive)
+                                    }
+                            } placeholder: {
+                                ProgressView()
+                            }
                             Image(systemName: "camera").foregroundColor(.white)
                         }
                     }).padding(.bottom)

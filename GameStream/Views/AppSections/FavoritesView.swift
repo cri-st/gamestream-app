@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 import AVKit
 
 struct FavoritesView: View {
@@ -27,9 +26,13 @@ struct FavoritesView: View {
                                 VideoPlayer(player: AVPlayer(url: URL(string: game.videosUrls.mobile)!)).frame(height: 216)
                                     .clipShape(RoundedRectangle(cornerRadius: 3))
                                 NavigationLink(destination: SearchView(searchText: game.title)) {
-                                    KFImage(URL(string: game.galleryImages[0])!)
-                                        .resizable()
-                                        .scaledToFit()
+                                    AsyncImage(url: URL(string: game.galleryImages[0])!) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
                                 }
                                 .hidden()
                                 Image(systemName: "play.circle.fill")

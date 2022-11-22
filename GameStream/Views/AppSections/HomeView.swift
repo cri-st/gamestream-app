@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 import AVKit
 
 struct HomeView: View {
@@ -157,11 +156,15 @@ struct HomeView: View {
                                 ForEach(allGames.gamesInformation.shuffled(), id: \.self) {
                                     game in
                                     NavigationLink(destination: GameDetailView(title: game.title, studio: game.studio, contentRaiting: game.contentRaiting, publicationYear: game.publicationYear, description: game.description, platforms: game.platforms, tags: game.tags, videoUrl: game.videosUrls.mobile, galleryImages: game.galleryImages)) {
-                                        KFImage(URL(string: game.galleryImages[0])!)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 240, height: 135)
-                                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                                        AsyncImage(url: URL(string: game.galleryImages[0])!) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 240, height: 135)
+                                                .clipShape(RoundedRectangle(cornerRadius: 3))
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
                                     }
                                 }
                             }
@@ -180,11 +183,15 @@ struct HomeView: View {
                                 ForEach(allGames.gamesInformation.shuffled(), id: \.self) {
                                     game in
                                     NavigationLink(destination: GameDetailView(title: game.title, studio: game.studio, contentRaiting: game.contentRaiting, publicationYear: game.publicationYear, description: game.description, platforms: game.platforms, tags: game.tags, videoUrl: game.videosUrls.mobile, galleryImages: game.galleryImages)) {
-                                        KFImage(URL(string: game.galleryImages[2])!)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 240, height: 135)
-                                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                                        AsyncImage(url: URL(string: game.galleryImages[0])!) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 240, height: 135)
+                                                .clipShape(RoundedRectangle(cornerRadius: 3))
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
                                     }
                                 }
                             }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct ProfileView: View {
     @ObservedObject var login: LoginViewModel
@@ -23,11 +22,15 @@ struct ProfileView: View {
                     .padding(EdgeInsets(top: 16, leading: 0, bottom: 32, trailing: 0))
                 ScrollView(showsIndicators: false) {
                     VStack {
-                        KFImage(URL(string: self.profilePhotoUrl))
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 98, height: 98)
-                            .clipShape(Circle())
+                        AsyncImage(url: URL(string: self.profilePhotoUrl)) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 98, height: 98)
+                                .clipShape(Circle())
+                        } placeholder: {
+                            ProgressView()
+                        }
                         Text(userName)
                             .font(.system(size: 22, weight: .bold, design: .rounded))
                             .foregroundColor(.white)

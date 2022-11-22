@@ -7,7 +7,6 @@
 
 import SwiftUI
 import AVKit
-import Kingfisher
 
 struct GameDetailView: View {
     let title:String
@@ -117,11 +116,15 @@ struct Gallery:View {
                 LazyHGrid(rows: gridForm, spacing: 8) {
                     ForEach(galleryImages, id: \.self) {
                         imageUrl in
-                        KFImage(URL(string: imageUrl))
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                            .padding(.bottom, 12)
+                        AsyncImage(url: URL(string: imageUrl)!) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                                .padding(.bottom, 12)
+                        } placeholder: {
+                            ProgressView()
+                        }
                     }
                 }
             }.frame(height: 180)

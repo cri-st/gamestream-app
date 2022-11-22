@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct GamesView: View {
     @ObservedObject var allGames = GamesViewModel()
@@ -28,11 +27,15 @@ struct GamesView: View {
                         ForEach(allGames.gamesInformation, id: \.self) {
                             game in
                             NavigationLink(destination: GameDetailView(title: game.title, studio: game.studio, contentRaiting: game.contentRaiting, publicationYear: game.publicationYear, description: game.description, platforms: game.platforms, tags: game.tags, videoUrl: game.videosUrls.mobile, galleryImages: game.galleryImages)) {
-                                KFImage(URL(string: game.galleryImages[0])!)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .clipShape(RoundedRectangle(cornerRadius: 4))
-                                    .padding(.bottom, 12)
+                                AsyncImage(url: URL(string: game.galleryImages[0])!) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                        .padding(.bottom, 12)
+                                } placeholder: {
+                                    ProgressView()
+                                }
                             }
                         }
                     }
